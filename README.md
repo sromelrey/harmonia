@@ -35,3 +35,30 @@ To install Eunomia UI, run:
 npm install eunomia-ui
 # or
 yarn add eunomia-ui
+```
+
+## 🗂️ Folder Structure
+```bash
+.
+├── app
+└── components/
+    ├── custom/
+    │   ├── table/
+    │   │   ├── accordion-table.tsx
+    │   │   ├── default-table.tsx
+    │   │   ├── nested-table.tsx
+    │   │   ├── pagination.tsx
+    │   │   └── indext.tsx
+    │   ├── form-fields/
+    │   │   ├── barcode-field.tsx
+    │   │   ├── input-field.tsx
+    │   │   ├── select-field.tsx
+    │   │   └── indext.tsx
+    │   └── filter-fields/
+    │       ├── date-filter.tsx
+    │       ├── search-filter.tsx
+    │       ├── select-filter.tsx
+    │       └── indext.tsx
+    └── ui/
+        └── button.tsx
+```
