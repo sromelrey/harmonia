@@ -1,64 +1,37 @@
-# Eunomia UI
+# **Eunomia UI**  
+**Elegant, structured, and reusable React components for modern web applications.**  
 
-**Elegant, structured, and reusable React components for modern web applications.**
-
-Eunomia UI is a modular component library built with **Next.js**, **Tailwind CSS**, and **Shadcn UI**. It offers a collection of accessible, themeable, and developer-friendly components designed to accelerate your development workflow.
-
----
-
-## 🧭 Motivation
-
-The primary motivation behind Eunomia UI is to establish a centralized repository of reusable components. In past projects, rebuilding similar UI elements led to redundant code and inconsistent designs. By creating this library, the goal is to:
-
-- **Enhance Efficiency**: Develop faster by reusing pre-built components.
-- **Ensure Consistency**: Maintain a uniform design language across projects.
-- **Simplify Maintenance**: Update components in one place, reflecting changes everywhere.
-
+Eunomia UI is a **modular React component library** built with **Next.js**, **Tailwind CSS**, and **Shadcn UI**.  
+It provides **accessible**, **themeable**, and **developer-friendly** components designed to help you build beautiful, consistent UIs faster.
 
 ---
 
-## 🚀 Features
+## 🧭 Motivation  
 
-- 📦 **Reusable Components**: 
-- 🎨 **Tailwind CSS Integration**: 
-- 🧩 **Shadcn UI Elements**:
-- 🌗 **Dark Mode Support**:
-- ⚙️ **Next.js App Directory**:
+In many projects, similar UI elements are repeatedly rebuilt — leading to redundant code, inconsistent designs, and wasted time.  
+Eunomia UI solves this by offering:  
+
+- **Efficiency** – Reuse pre-built components to speed up development.  
+- **Consistency** – Maintain a unified design language across multiple projects.  
+- **Maintainability** – Update components in one place and reflect changes everywhere.  
 
 ---
 
-## 📦 Installation
+## 🚀 Features  
 
-To install Eunomia UI, run:
+- 📦 **Reusable Components** – Ready-to-use building blocks for tables, forms, filters, and more.  
+- 🎨 **Tailwind CSS Integration** – Utility-first styling for rapid customization.  
+- 🧩 **Shadcn UI Elements** – Composable, accessible, and modern UI primitives.  
+- 🌗 **Dark Mode Support** – Seamlessly switch between light and dark themes.  
+- ⚙️ **Next.js App Directory** – Built for the latest Next.js architecture.  
+
+---
+
+## 📦 Installation  
+
+Install via npm or yarn:  
 
 ```bash
 npm install eunomia-ui
 # or
 yarn add eunomia-ui
-```
-
-## 🗂️ Folder Structure
-```bash
-.
-├── app
-└── components/
-    ├── custom/
-    │   ├── table/
-    │   │   ├── accordion-table.tsx
-    │   │   ├── default-table.tsx
-    │   │   ├── nested-table.tsx
-    │   │   ├── pagination.tsx
-    │   │   └── indext.tsx
-    │   ├── form-fields/
-    │   │   ├── barcode-field.tsx
-    │   │   ├── input-field.tsx
-    │   │   ├── select-field.tsx
-    │   │   └── indext.tsx
-    │   └── filter-fields/
-    │       ├── date-filter.tsx
-    │       ├── search-filter.tsx
-    │       ├── select-filter.tsx
-    │       └── indext.tsx
-    └── ui/
-        └── button.tsx
-```

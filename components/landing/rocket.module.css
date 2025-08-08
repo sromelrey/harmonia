@@ -1,0 +1,362 @@
+/* Enhanced starfield with multiple layers */
+.stars {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+      hsl(var(--foreground) / 0.4) 0.5px,
+      transparent 1px
+    ),
+    radial-gradient(hsl(var(--primary) / 0.3) 0.5px, transparent 1px),
+    radial-gradient(hsl(var(--accent) / 0.2) 1px, transparent 1.5px);
+  background-size: 50px 50px, 100px 100px, 150px 150px;
+  background-position: 0 0, 25px 25px, 75px 75px;
+  opacity: 0.6;
+}
+
+.parallaxA {
+  animation: star-drift-a 80s linear infinite;
+}
+
+.parallaxB {
+  animation: star-drift-b 120s linear infinite reverse;
+  opacity: 0.4;
+  background-size: 75px 75px, 125px 125px, 200px 200px;
+}
+
+.parallaxC {
+  animation: star-drift-c 60s linear infinite;
+  opacity: 0.3;
+  background-image: radial-gradient(
+    hsl(var(--accent) / 0.5) 0.5px,
+    transparent 1px
+  );
+  background-size: 40px 40px;
+}
+
+@keyframes star-drift-a {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate(200px, 150px) rotate(360deg);
+  }
+}
+
+@keyframes star-drift-b {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(100px, 75px) scale(1.1);
+  }
+  100% {
+    transform: translate(200px, 150px) scale(1);
+  }
+}
+
+@keyframes star-drift-c {
+  0% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(50px, -30px);
+  }
+  66% {
+    transform: translate(-30px, 80px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* Enhanced orbital rings with glow effects */
+.ring {
+  width: 16rem;
+  height: 16rem;
+  border-radius: 9999px;
+  border: 1px solid hsl(var(--primary) / 0.25);
+  position: relative;
+}
+
+.ring::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 9999px;
+  padding: 2px;
+  background: linear-gradient(
+    45deg,
+    hsl(var(--primary) / 0.3),
+    transparent 30%,
+    hsl(var(--primary) / 0.1) 70%,
+    hsl(var(--primary) / 0.3)
+  );
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+}
+
+.ringLarge {
+  position: absolute;
+  width: 20rem;
+  height: 20rem;
+  border-radius: 9999px;
+  border: 1px solid hsl(var(--accent) / 0.15);
+  box-shadow: 0 0 20px hsl(var(--accent) / 0.1),
+    inset 0 0 20px hsl(var(--accent) / 0.05);
+}
+
+.ringLarge::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: hsl(var(--accent));
+  box-shadow: 0 0 10px hsl(var(--accent));
+  animation: ring-dot 4s ease-in-out infinite;
+}
+
+@keyframes ring-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.5);
+  }
+}
+
+.spinSlow {
+  animation: spin-enhanced 25s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.spinReverse {
+  animation: spin-enhanced 35s cubic-bezier(0.4, 0, 0.6, 1) infinite reverse;
+}
+
+@keyframes spin-enhanced {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.02);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+/* Enhanced rocket styling with gradients */
+.rocketContainer {
+  position: relative;
+  animation: rocket-float 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px hsl(var(--primary) / 0.3));
+}
+
+@keyframes rocket-float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-5px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-3px) rotate(-1deg);
+  }
+}
+
+.rocketBody {
+  fill: url(#rocketGradient);
+  filter: drop-shadow(0 0 8px hsl(var(--primary) / 0.4));
+}
+
+.rocketTip {
+  fill: url(#tipGradient);
+  filter: drop-shadow(0 0 6px hsl(var(--primary) / 0.3));
+}
+
+.fin {
+  fill: url(#finGradient);
+  filter: drop-shadow(0 0 4px hsl(var(--accent) / 0.4));
+}
+
+.windowOuter {
+  fill: hsl(var(--background));
+  stroke: hsl(var(--foreground) / 0.6);
+  stroke-width: 1.5px;
+  filter: drop-shadow(0 0 4px hsl(var(--primary) / 0.2));
+}
+
+.windowInner {
+  fill: url(#windowGradient);
+  animation: window-pulse 3s ease-in-out infinite;
+}
+
+@keyframes window-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.flameOuter {
+  fill: url(#flameGradientOuter);
+  animation: flame-dance 0.8s ease-in-out infinite;
+  transform-origin: 50% 0%;
+}
+
+.flameInner {
+  fill: url(#flameGradientInner);
+  animation: flame-dance 0.6s ease-in-out infinite;
+  transform-origin: 50% 0%;
+}
+
+@keyframes flame-dance {
+  0%,
+  100% {
+    transform: scaleY(1) scaleX(1);
+    opacity: 0.9;
+  }
+  25% {
+    transform: scaleY(0.8) scaleX(1.1);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleY(0.7) scaleX(1.2);
+    opacity: 0.8;
+  }
+  75% {
+    transform: scaleY(0.9) scaleX(0.9);
+    opacity: 1;
+  }
+}
+
+/* Enhanced thruster effects */
+.thrusterGlow {
+  position: absolute;
+  left: 50%;
+  top: 7.5rem;
+  transform: translateX(-50%);
+  width: 8rem;
+  height: 8rem;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    hsl(var(--accent) / 0.4) 0%,
+    hsl(var(--primary) / 0.2) 40%,
+    transparent 70%
+  );
+  filter: blur(25px);
+  animation: thruster-pulse 2s ease-in-out infinite;
+}
+
+.thrusterGlow::before {
+  content: "";
+  position: absolute;
+  inset: 25%;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    #ff6b35 0%,
+    #ffbe0b 50%,
+    transparent 100%
+  );
+  filter: blur(10px);
+  animation: thruster-core 1.5s ease-in-out infinite;
+}
+
+@keyframes thruster-pulse {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes thruster-core {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+}
+
+/* Particle effects */
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: hsl(var(--primary) / 0.6);
+  border-radius: 50%;
+  animation: particle-float 4s linear infinite;
+}
+
+.particle:nth-child(odd) {
+  background: hsl(var(--accent) / 0.5);
+  animation-duration: 6s;
+}
+
+@keyframes particle-float {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-100px) scale(0.8);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-200px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* Accessibility and performance */
+@media (prefers-reduced-motion: reduce) {
+  .parallaxA,
+  .parallaxB,
+  .parallaxC,
+  .spinSlow,
+  .spinReverse,
+  .flameOuter,
+  .flameInner,
+  .rocketContainer,
+  .windowInner,
+  .thrusterGlow,
+  .thrusterGlow::before,
+  .particle,
+  .ring::before,
+  .ringLarge::after {
+    animation: none !important;
+  }
+
+  .rocketContainer {
+    filter: none;
+  }
+}
