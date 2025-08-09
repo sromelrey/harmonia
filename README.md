@@ -1,7 +1,7 @@
-# **Eunomia UI**  
+# **Harmonia Components**  
 **Elegant, structured, and reusable React components for modern web applications.**  
 
-Eunomia UI is a **modular React component library** built with **Next.js**, **Tailwind CSS**, and **Shadcn UI**.  
+Harmonia Components is a **modular React component library** built with **Next.js**, **Tailwind CSS**, and **Shadcn UI**.  
 It provides **accessible**, **themeable**, and **developer-friendly** components designed to help you build beautiful, consistent UIs faster.
 
 ---
@@ -9,7 +9,7 @@ It provides **accessible**, **themeable**, and **developer-friendly** components
 ## 🧭 Motivation  
 
 In many projects, similar UI elements are repeatedly rebuilt — leading to redundant code, inconsistent designs, and wasted time.  
-Eunomia UI solves this by offering:  
+Harmonia Components solves this by offering:  
 
 - **Efficiency** – Reuse pre-built components to speed up development.  
 - **Consistency** – Maintain a unified design language across multiple projects.  
@@ -32,6 +32,6 @@ Eunomia UI solves this by offering:
 Install via npm or yarn:  
 
 ```bash
-npm install eunomia-ui
+npm install harmonia-components
 # or
-yarn add eunomia-ui
+yarn add harmonia-components
