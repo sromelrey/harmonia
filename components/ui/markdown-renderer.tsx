@@ -43,7 +43,7 @@ export function MarkdownRenderer({
         // Lists
         .replace(/^\- (.*$)/gim, '<li class="ml-4">$1</li>')
         .replace(
-          /(<li.*<\/li>)/s,
+          /(<li.*<\/li>)/g,
           '<ul class="list-disc list-inside space-y-1 my-4">$1</ul>'
         )
         // Links
