@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:lib": "tsup index.ts --out-dir dist --format esm,cjs --dts --tsconfig tsconfig.build.json",
+    "build:lib": "tsup index.ts --out-dir dist --format esm,cjs --dts --tsconfig tsconfig.build.json --clean",
     "prepublishOnly": "npm run build:lib"
   },
   "exports": {
