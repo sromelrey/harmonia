@@ -1,6 +1,8 @@
 # **Harmonia Components**  
 **Elegant, structured, and reusable React components for modern web applications.**  
 
+🌐 **[Live Demo](https://harmonia-components.vercel.app)** | 📦 **[npm Package](https://www.npmjs.com/package/harmonia-components)**
+
 Harmonia Components is a **modular React component library** built with **Next.js**, **Tailwind CSS**, and **Shadcn UI**.  
 It provides **accessible**, **themeable**, and **developer-friendly** components designed to help you build beautiful, consistent UIs faster.
 

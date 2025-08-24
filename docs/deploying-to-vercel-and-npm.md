@@ -33,7 +33,39 @@ This guide covers the full workflow for:
 ## 3. Publishing & Updating on npm
 
 ```bash
-npm login
-npm run build:lib
+# First, ensure all changes are committed and pushed
+git add .
+git commit -m "your commit message"
+git push
+
+# Update version and publish
+npm version patch
+git push --follow-tags
 npm publish --access public
+```
+
+### Troubleshooting Common Issues
+
+#### Build Errors
+If you encounter `ERR_PNPM_OUTDATED_LOCKFILE`:
+```bash
+pnpm install
+git add pnpm-lock.yaml
+git commit -m "fix: update lockfile"
+git push
+```
+
+#### TypeScript Build Errors
+If you get "Cannot write file 'dist/index.d.ts' because it would overwrite input file":
+1. Clean the dist directory: `rm -rf dist`
+2. Ensure `dist` is in the exclude list in `tsconfig.build.json`
+3. Run build: `npm run build:lib`
+
+#### Git Working Directory Not Clean
+If npm version fails with "Git working directory not clean":
+```bash
+git add .
+git commit -m "your changes"
+git push
+npm version patch
 ```
