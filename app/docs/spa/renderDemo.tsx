@@ -2,6 +2,9 @@
 
 import SampleForm from "@/components/demos/sample-form";
 import ButtonDemo from "@/components/demos/button-demo";
+import ComboBoxDemo from "@/components/demos/combo-box-demo";
+import DataTableDemo from "@/components/demos/data-table-demo";
+import TableDemo from "@/components/demos/table-demo";
 import { ITEMS } from "./items";
 
 function PlaceholderDemo({ name }: { name: string }) {
@@ -22,6 +25,12 @@ export function renderDemo(slug: string) {
       return <SampleForm />;
     case "button":
       return <ButtonDemo />;
+    case "combo-box":
+      return <ComboBoxDemo />;
+    case "data-table":
+      return <DataTableDemo />;
+    case "table":
+      return <TableDemo />;
     default: {
       const item = ITEMS.find((i) => i.slug === slug);
       return <PlaceholderDemo name={item?.name ?? slug} />;

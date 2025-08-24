@@ -22,7 +22,7 @@ export default function Sidebar({ items, selectedSlug, onSelect }: Props) {
   return (
     <aside className='rounded-xl border border-muted bg-background/80 backdrop-blur p-4 h-fit lg:sticky lg:top-6'>
       <div className='mb-3'>
-        <h1 className='text-xl font-semibold'>Eunomia UI</h1>
+        <h1 className='text-xl font-semibold'>Harmonia Components</h1>
         <p className='text-xs text-muted-foreground'>
           Browse components & live demos
         </p>

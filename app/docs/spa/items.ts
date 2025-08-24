@@ -7,25 +7,22 @@ export const ITEMS: Item[] = [
     description: "A reusable button component",
   },
   {
-    name: "AccordionTable",
-    slug: "accordion-table",
-    description: "Table with expandable rows",
+    name: "ComboBox",
+    slug: "combo-box",
+    description:
+      "Advanced dropdown with search, virtualization, and multi-select",
   },
   {
-    name: "BarcodeField",
-    slug: "barcode-field",
-    description: "Form input for barcode scanning",
+    name: "DataTable",
+    slug: "data-table",
+    description: "Advanced table with sorting, selection, and infinite scroll",
   },
   {
-    name: "DateFilter",
-    slug: "date-filter",
-    description: "Date range filter for tables",
+    name: "Table",
+    slug: "table",
+    description: "Simple table with add row functionality",
   },
-  {
-    name: "SelectField",
-    slug: "select-field",
-    description: "Custom select input with search",
-  },
+
   {
     name: "SampleForm",
     slug: "sample-form",

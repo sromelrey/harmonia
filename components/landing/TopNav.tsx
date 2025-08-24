@@ -11,9 +11,9 @@ export default function TopNav() {
           <Link
             href='/'
             className='text-xl font-semibold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent'
-            aria-label='Eunomia UI Home'
+            aria-label='Harmonia Components Home'
           >
-            🚀 Eunomia UI
+            🚀 Harmonia Components
           </Link>
 
           <div className='hidden md:flex items-center gap-6'>
@@ -23,9 +23,8 @@ export default function TopNav() {
             >
               Components
             </a>
-            {/* TODO: wire real routes */}
             <Link
-              href='#'
+              href='/docs'
               className='text-muted-foreground hover:text-foreground transition-colors'
             >
               Docs
