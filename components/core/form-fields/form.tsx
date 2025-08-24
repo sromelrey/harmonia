@@ -14,7 +14,7 @@ type FormProps<TFieldValues extends FieldValues = FieldValues> = {
   children: React.ReactNode;
 } & Omit<React.ComponentProps<"form">, "onSubmit">;
 
-export function UnifiedForm<TFieldValues extends FieldValues = FieldValues>({
+export default function Form<TFieldValues extends FieldValues = FieldValues>({
   form,
   onSubmit,
   children,
