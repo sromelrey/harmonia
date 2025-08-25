@@ -32,6 +32,7 @@ var index_exports = {};
 __export(index_exports, {
   ComboBox: () => combo_box_default,
   DataTable: () => data_table_default,
+  DataTableActions: () => DataTableActions,
   Form: () => Form,
   Input: () => InputField,
   Select: () => Select2,
@@ -1126,9 +1127,247 @@ function InfiniteScrollFooter({
   ) });
 }
 
-// components/core/data-table/data-table.tsx
+// components/core/data-table/data-table-actions.tsx
+var import_lucide_react9 = require("lucide-react");
+
+// components/ui/sheet.tsx
+var SheetPrimitive = __toESM(require("@radix-ui/react-dialog"));
+var import_lucide_react8 = require("lucide-react");
 var import_jsx_runtime15 = require("react/jsx-runtime");
-var Checkbox2 = import_react5.default.forwardRef((props, ref) => /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Checkbox, { ref, ...props }));
+function Sheet({ ...props }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(SheetPrimitive.Root, { "data-slot": "sheet", ...props });
+}
+function SheetTrigger({
+  ...props
+}) {
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(SheetPrimitive.Trigger, { "data-slot": "sheet-trigger", ...props });
+}
+function SheetClose({
+  ...props
+}) {
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(SheetPrimitive.Close, { "data-slot": "sheet-close", ...props });
+}
+function SheetPortal({
+  ...props
+}) {
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(SheetPrimitive.Portal, { "data-slot": "sheet-portal", ...props });
+}
+function SheetOverlay({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+    SheetPrimitive.Overlay,
+    {
+      "data-slot": "sheet-overlay",
+      className: cn(
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function SheetContent({
+  className,
+  children,
+  side = "right",
+  ...props
+}) {
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(SheetPortal, { children: [
+    /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(SheetOverlay, {}),
+    /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
+      SheetPrimitive.Content,
+      {
+        "data-slot": "sheet-content",
+        className: cn(
+          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
+          side === "right" && "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm",
+          side === "left" && "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 h-full w-3/4 border-r sm:max-w-sm",
+          side === "top" && "data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 h-auto border-b",
+          side === "bottom" && "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto border-t",
+          className
+        ),
+        ...props,
+        children: [
+          children,
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(SheetPrimitive.Close, { className: "ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(import_lucide_react8.XIcon, { className: "size-4" }),
+            /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { className: "sr-only", children: "Close" })
+          ] })
+        ]
+      }
+    )
+  ] });
+}
+function SheetHeader({ className, ...props }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+    "div",
+    {
+      "data-slot": "sheet-header",
+      className: cn("flex flex-col gap-1.5 p-4", className),
+      ...props
+    }
+  );
+}
+function SheetTitle({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+    SheetPrimitive.Title,
+    {
+      "data-slot": "sheet-title",
+      className: cn("text-foreground font-semibold", className),
+      ...props
+    }
+  );
+}
+function SheetDescription({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+    SheetPrimitive.Description,
+    {
+      "data-slot": "sheet-description",
+      className: cn("text-muted-foreground text-sm", className),
+      ...props
+    }
+  );
+}
+
+// components/core/data-table/data-table-actions.tsx
+var import_jsx_runtime16 = require("react/jsx-runtime");
+function DataTableActions({
+  crudActions,
+  selectedRows,
+  showCheckbox = false
+}) {
+  const hasSelectedRows = selectedRows.size > 0;
+  const getSheetWidthStyles = (width) => {
+    if (!width) {
+      return {
+        width: "50vw",
+        minWidth: "400px",
+        maxWidth: "800px"
+      };
+    }
+    if (width.endsWith("%")) {
+      const percentage = width.replace("%", "");
+      return {
+        width: `${percentage}vw`,
+        minWidth: "400px",
+        maxWidth: "90vw"
+      };
+    }
+    if (width.includes("px")) {
+      return {
+        width,
+        minWidth: "400px"
+      };
+    }
+    if (width.includes("vw")) {
+      return {
+        width,
+        minWidth: "400px"
+      };
+    }
+    if (width.includes("rem")) {
+      return {
+        width,
+        minWidth: "25rem"
+        // 400px equivalent
+      };
+    }
+    return {
+      width: `${width}px`,
+      minWidth: "400px"
+    };
+  };
+  const sheetWidthStyles = getSheetWidthStyles(crudActions.sheetWidth);
+  return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "flex items-center justify-between mb-4 gap-2 flex-wrap", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "flex items-center gap-2", children: [
+      crudActions.onAdd && /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Sheet, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(SheetTrigger, { asChild: true, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(
+          Button,
+          {
+            variant: crudActions.addButton?.variant || "default",
+            size: crudActions.addButton?.size || "sm",
+            className: "flex items-center gap-2",
+            children: [
+              crudActions.addButton?.icon || /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_lucide_react9.Plus, { className: "h-4 w-4" }),
+              crudActions.addButton?.label || crudActions.addButtonTitle || "Add Data"
+            ]
+          }
+        ) }),
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(SheetContent, { side: "right", style: sheetWidthStyles, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(SheetHeader, { className: "flex flex-row items-center justify-between space-y-0 pb-4 border-b", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "flex flex-col space-y-1.5", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(SheetTitle, { children: crudActions.addSheetTitle || "Add New Item" }),
+              /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(SheetDescription, { children: crudActions.addSheetDescription || "Fill in the details to add a new item." })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "flex items-center gap-2", children: crudActions.renderSheetActions ? crudActions.renderSheetActions() : /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(import_jsx_runtime16.Fragment, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(SheetClose, { asChild: true, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+                Button,
+                {
+                  variant: "outline",
+                  size: "sm",
+                  onClick: crudActions.onCancel,
+                  children: "Cancel"
+                }
+              ) }),
+              /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+                Button,
+                {
+                  size: "sm",
+                  onClick: crudActions.onSave || (() => console.log("Save clicked")),
+                  children: "Save"
+                }
+              )
+            ] }) })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "py-4 flex-1 overflow-y-auto", children: crudActions.renderAddContent ? crudActions.renderAddContent() : /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "text-center text-gray-500 py-8", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("p", { children: "Add form content goes here." }),
+            /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("p", { className: "text-sm mt-2", children: "Use the renderAddContent prop to customize this area." })
+          ] }) })
+        ] })
+      ] }),
+      crudActions.onRefresh && /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(
+        Button,
+        {
+          variant: crudActions.refreshButton?.variant || "outline",
+          size: crudActions.refreshButton?.size || "sm",
+          onClick: crudActions.onRefresh,
+          className: "flex items-center gap-2",
+          children: [
+            crudActions.refreshButton?.icon || /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_lucide_react9.RefreshCw, { className: "h-4 w-4" }),
+            crudActions.refreshButton?.label || crudActions.refreshButtonTitle || "Refresh"
+          ]
+        }
+      )
+    ] }),
+    crudActions.onDeleteSelected && showCheckbox && /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(
+      Button,
+      {
+        variant: crudActions.deleteButton?.variant || "destructive",
+        size: crudActions.deleteButton?.size || "sm",
+        onClick: () => crudActions.onDeleteSelected(selectedRows),
+        disabled: !hasSelectedRows,
+        className: "flex items-center gap-2",
+        children: [
+          crudActions.deleteButton?.icon || /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_lucide_react9.Trash2, { className: "h-4 w-4" }),
+          crudActions.deleteButton?.label || crudActions.deleteButtonTitle || "Delete Selected",
+          hasSelectedRows && `(${selectedRows.size})`
+        ]
+      }
+    )
+  ] });
+}
+
+// components/core/data-table/data-table.tsx
+var import_jsx_runtime17 = require("react/jsx-runtime");
+var Checkbox2 = import_react5.default.forwardRef((props, ref) => /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Checkbox, { ref, ...props }));
 Checkbox2.displayName = "Checkbox";
 function DataTable(props) {
   const {
@@ -1144,7 +1383,11 @@ function DataTable(props) {
     isSub,
     paginationMode = "none",
     isLoading,
-    handleLoadMore
+    handleLoadMore,
+    className,
+    headerClassName,
+    bodyClassName,
+    crudActions
   } = props;
   const data = (0, import_react5.useMemo)(() => initialData, [initialData]);
   const memoizedColumns = (0, import_react5.useMemo)(() => initialColumns, [initialColumns]);
@@ -1181,11 +1424,11 @@ function DataTable(props) {
     if (showCheckbox) {
       extraColumns.push({
         id: "select",
-        header: () => /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+        header: () => /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
           "div",
           {
             className: `flex justify-center text-center ${renderSubTable && "pl-[5px] pr-[15px]"}`,
-            children: !isSub && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+            children: !isSub && /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
               Checkbox2,
               {
                 ref: selectAllRef,
@@ -1196,11 +1439,11 @@ function DataTable(props) {
             )
           }
         ),
-        cell: ({ row }) => /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+        cell: ({ row }) => /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
           "div",
           {
             className: `flex justify-center text-center ${renderSubTable && "pl-[5px] pr-[15px]"}`,
-            children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+            children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
               Checkbox2,
               {
                 checked: selectedRows.has(row.id),
@@ -1243,45 +1486,57 @@ function DataTable(props) {
     onSortingChange: setSorting,
     getRowId: getRowId ? (originalRow) => String(getRowId?.(originalRow)) : void 0
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: `${isScrollable ? "overflow-x-auto" : ""} `, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(Table, { className: `min-w-full table-auto`, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
-        TableHeader2,
-        {
-          table,
-          isSub,
-          hasColumnFilter
-        }
-      ),
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
-        TableBody2,
-        {
-          table,
-          selectedRows,
-          expandedRows,
-          renderSubTable,
-          isSub,
-          toggleRowExpansion
-        }
-      )
-    ] }),
-    paginationMode === "infinite-scroll" && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
-      InfiniteScrollFooter,
+  return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: `${className || ""}`.trim(), children: [
+    crudActions && /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+      DataTableActions,
       {
-        isLoading,
-        hasMore,
-        onLoadMore: handleLoadMore
+        crudActions,
+        selectedRows,
+        showCheckbox
       }
     ),
-    paginationMode === "infinite-scroll" && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { ref: loadMoreRef })
+    /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: `${isScrollable ? "overflow-x-auto" : ""}`, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(Table, { className: `min-w-full table-auto`, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+          TableHeader2,
+          {
+            table,
+            isSub,
+            hasColumnFilter,
+            className: headerClassName
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+          TableBody2,
+          {
+            table,
+            selectedRows,
+            expandedRows,
+            renderSubTable,
+            isSub,
+            toggleRowExpansion,
+            className: bodyClassName
+          }
+        )
+      ] }),
+      paginationMode === "infinite-scroll" && /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+        InfiniteScrollFooter,
+        {
+          isLoading,
+          hasMore,
+          onLoadMore: handleLoadMore
+        }
+      ),
+      paginationMode === "infinite-scroll" && /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { ref: loadMoreRef })
+    ] })
   ] });
 }
 var data_table_default = DataTable;
 
 // components/core/table/table.tsx
 var import_react_table4 = require("@tanstack/react-table");
-var import_lucide_react8 = require("lucide-react");
-var import_jsx_runtime16 = require("react/jsx-runtime");
+var import_lucide_react10 = require("lucide-react");
+var import_jsx_runtime18 = require("react/jsx-runtime");
 function Table2({
   data,
   isDisabled,
@@ -1294,13 +1549,13 @@ function Table2({
     columns,
     getCoreRowModel: (0, import_react_table4.getCoreRowModel)()
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "max-w-full", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "border rounded-lg shadow-sm overflow-hidden", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Table, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(TableHeader, { className: "bg-[#efefef] text-[#222222]", children: table.getHeaderGroups().map((headerGroup) => /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "max-w-full", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "border rounded-lg shadow-sm overflow-hidden", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)(Table, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(TableHeader, { className: "bg-[#efefef] text-[#222222]", children: table.getHeaderGroups().map((headerGroup) => /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
         TableRow,
         {
           className: "bg-[#efefef] text-[#222222]",
-          children: headerGroup.headers.map((header) => /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+          children: headerGroup.headers.map((header) => /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
             TableHead,
             {
               className: `font-semibold text-gray-700 dark:text-gray-300 border-b border-r border-gray-200 last:border-r-0`,
@@ -1314,12 +1569,12 @@ function Table2({
         },
         headerGroup.id
       )) }),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(TableBody, { children: table.getRowModel().rows?.length ? table.getRowModel().rows.map((row) => /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(TableBody, { children: table.getRowModel().rows?.length ? table.getRowModel().rows.map((row) => /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
         TableRow,
         {
           "data-state": row.getIsSelected() && "selected",
           className: "hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150",
-          children: row.getVisibleCells().map((cell) => /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+          children: row.getVisibleCells().map((cell) => /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
             TableCell,
             {
               className: `text-gray-800 dark:text-gray-200 border-b border-r border-gray-200 last:border-r-0 ${cell.column.columnDef.isRightAligned ? "text-right" : ""} ${cell.column.columnDef.accessorKey === "item_no" ? "font-medium text-gray-900 dark:text-gray-100" : ""}`,
@@ -1332,7 +1587,7 @@ function Table2({
           ))
         },
         row.id
-      )) : /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(TableRow, { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+      )) : /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(TableRow, { children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
         TableCell,
         {
           colSpan: columns.length,
@@ -1341,14 +1596,14 @@ function Table2({
         }
       ) }) })
     ] }) }),
-    showAddRowButton && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "flex justify-start mt-2", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(
+    showAddRowButton && /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "flex justify-start mt-2", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)(
       Button,
       {
         onClick: onAddRow,
         className: "bg-white text-black hover:bg-slate-400 ",
         disabled: isDisabled,
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_lucide_react8.CirclePlus, { className: "mr-2 h-4 w-4" }),
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_lucide_react10.CirclePlus, { className: "mr-2 h-4 w-4" }),
           " ",
           "Add Row"
         ]
@@ -1360,6 +1615,7 @@ function Table2({
 0 && (module.exports = {
   ComboBox,
   DataTable,
+  DataTableActions,
   Form,
   Input,
   Select,

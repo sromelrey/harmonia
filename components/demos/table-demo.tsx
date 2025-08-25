@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import Table from "@/components/core/table";
+import { Table } from "@/components/core/table";
 
 // Sample data interface
 interface Product {

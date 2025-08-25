@@ -93,6 +93,30 @@ type RowId$1 = string | number;
 interface BaseRow {
     id: RowId$1;
 }
+interface ActionButtonConfig {
+    label?: string;
+    icon?: React.ReactNode;
+    variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+    size?: "default" | "sm" | "lg" | "icon";
+}
+interface DataTableCrudActions {
+    onAdd?: () => void;
+    onDeleteSelected?: (selectedRowIds: Set<RowId$1>) => void;
+    onRefresh?: () => void;
+    addButton?: ActionButtonConfig;
+    deleteButton?: ActionButtonConfig;
+    refreshButton?: ActionButtonConfig;
+    addButtonTitle?: string;
+    deleteButtonTitle?: string;
+    refreshButtonTitle?: string;
+    addSheetTitle?: string;
+    addSheetDescription?: string;
+    renderAddContent?: () => React.ReactNode;
+    renderSheetActions?: () => React.ReactNode;
+    onSave?: () => void;
+    onCancel?: () => void;
+    sheetWidth?: string;
+}
 interface DataTableProps<T extends BaseRow = BaseRow> {
     data: T[];
     columns: ColumnDef<T>[];
@@ -122,6 +146,10 @@ interface DataTableProps<T extends BaseRow = BaseRow> {
     isSub?: boolean;
     getRowId?: (originalRow: T) => RowId$1;
     handleLoadMore?: () => void;
+    className?: string;
+    headerClassName?: string;
+    bodyClassName?: string;
+    crudActions?: DataTableCrudActions;
 }
 interface TableHeaderProps<T extends BaseRow = BaseRow> {
     table: Table$1<T>;
@@ -144,6 +172,13 @@ interface TableBodyProps<T extends BaseRow = BaseRow> {
 }
 
 declare function DataTable<T extends BaseRow>(props: DataTableProps<T>): react_jsx_runtime.JSX.Element;
+
+interface DataTableActionsProps {
+    crudActions: DataTableCrudActions;
+    selectedRows: Set<RowId$1>;
+    showCheckbox?: boolean;
+}
+declare function DataTableActions({ crudActions, selectedRows, showCheckbox, }: DataTableActionsProps): react_jsx_runtime.JSX.Element;
 
 type RowId = string | number;
 declare function useDataTable<T extends {
@@ -201,4 +236,4 @@ interface TableProps<T> {
 }
 declare function Table<T>({ data, isDisabled, columns, onAddRow, showAddRowButton, }: TableProps<T>): react_jsx_runtime.JSX.Element;
 
-export { type BaseRow, ComboBox, DataTable, type DataTableProps, Form, InputField as Input, type PaginationMode, type RowId$1 as RowId, Select, Table, type TableBodyProps, type TableHeaderProps, getBaseCellClassNames, getBodyCellClassNames, getHeaderCellClassNames, setCellAlignment, setCellBorder, useDataTable };
+export { type ActionButtonConfig, type BaseRow, ComboBox, DataTable, DataTableActions, type DataTableCrudActions, type DataTableProps, Form, InputField as Input, type PaginationMode, type RowId$1 as RowId, Select, Table, type TableBodyProps, type TableHeaderProps, getBaseCellClassNames, getBodyCellClassNames, getHeaderCellClassNames, setCellAlignment, setCellBorder, useDataTable };

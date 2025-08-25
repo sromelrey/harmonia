@@ -1,10 +1,16 @@
 // Re-export the main DataTable component
-export { default as DataTable } from "./data-table";
+import DataTableComponent from "./data-table";
+export { DataTableComponent as DataTable };
+
+// Re-export DataTableActions component
+export { default as DataTableActions } from "./data-table-actions";
 
 // Re-export types
 export type {
   BaseRow,
   DataTableProps,
+  DataTableCrudActions,
+  ActionButtonConfig,
   PaginationMode,
   RowId,
   TableHeaderProps,

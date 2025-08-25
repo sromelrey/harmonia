@@ -44,9 +44,9 @@ import TableBody from "./body";
 import { Table } from "@/components/ui/table";
 // import ExpandableTable from "./expandable-table";
 import { BaseRow, DataTableProps } from "./types";
-
 import { useDataTable } from "./useDataTable";
 import InfiniteScrollFooter from "./infinite-scroll";
+import DataTableActions from "./data-table-actions";
 
 const Checkbox = React.forwardRef<
   HTMLButtonElement,
@@ -70,6 +70,10 @@ function DataTable<T extends BaseRow>(props: DataTableProps<T>) {
     paginationMode = "none",
     isLoading,
     handleLoadMore,
+    className,
+    headerClassName,
+    bodyClassName,
+    crudActions,
   } = props;
 
   const data = useMemo(() => initialData, [initialData]); // Memoize data
@@ -189,38 +193,52 @@ function DataTable<T extends BaseRow>(props: DataTableProps<T>) {
   // }
 
   return (
-    <div className={`${isScrollable ? "overflow-x-auto" : ""} `}>
-      <Table className={`min-w-full table-auto`}>
-        <TableHeader
-          table={table}
-          isSub={isSub}
-          hasColumnFilter={hasColumnFilter}
-        />
-        <TableBody
-          table={table}
+    <div className={`${className || ""}`.trim()}>
+      {/* CRUD Action Buttons */}
+      {crudActions && (
+        <DataTableActions
+          crudActions={crudActions}
           selectedRows={selectedRows}
-          expandedRows={expandedRows}
-          renderSubTable={renderSubTable}
-          isSub={isSub}
-          toggleRowExpansion={toggleRowExpansion}
-        />
-      </Table>
-      {paginationMode === "infinite-scroll" && (
-        <InfiniteScrollFooter
-          isLoading={isLoading}
-          hasMore={hasMore}
-          onLoadMore={handleLoadMore}
+          showCheckbox={showCheckbox}
         />
       )}
-      {/* // TODO: Will implement this on other component that uses pagination */}
-      {/* {paginationMode === "pagination" && (
-        <PaginationControls
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={onPageChange}
-        />
-      )} */}
-      {paginationMode === "infinite-scroll" && <div ref={loadMoreRef} />}
+
+      {/* Table Container */}
+      <div className={`${isScrollable ? "overflow-x-auto" : ""}`}>
+        <Table className={`min-w-full table-auto`}>
+          <TableHeader
+            table={table}
+            isSub={isSub}
+            hasColumnFilter={hasColumnFilter}
+            className={headerClassName}
+          />
+          <TableBody
+            table={table}
+            selectedRows={selectedRows}
+            expandedRows={expandedRows}
+            renderSubTable={renderSubTable}
+            isSub={isSub}
+            toggleRowExpansion={toggleRowExpansion}
+            className={bodyClassName}
+          />
+        </Table>
+        {paginationMode === "infinite-scroll" && (
+          <InfiniteScrollFooter
+            isLoading={isLoading}
+            hasMore={hasMore}
+            onLoadMore={handleLoadMore}
+          />
+        )}
+        {/* // TODO: Will implement this on other component that uses pagination */}
+        {/* {paginationMode === "pagination" && (
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={onPageChange}
+          />
+        )} */}
+        {paginationMode === "infinite-scroll" && <div ref={loadMoreRef} />}
+      </div>
     </div>
   );
 }
