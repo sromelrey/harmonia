@@ -421,6 +421,9 @@ var ComboBox = ({
 };
 var combo_box_default = ComboBox;
 
+// components/core/form-fields/input.tsx
+import React2 from "react";
+
 // components/ui/textarea.tsx
 import { jsx as jsx4 } from "react/jsx-runtime";
 function Textarea({ className, ...props }) {
@@ -458,6 +461,7 @@ function Label({
 }
 
 // components/core/form-fields/input.tsx
+import { X as X2 } from "lucide-react";
 import { jsx as jsx6, jsxs as jsxs2 } from "react/jsx-runtime";
 function InputField({
   label,
@@ -469,14 +473,30 @@ function InputField({
   direction = "column",
   disabled = false,
   required = false,
-  isTextarea = false
+  isTextarea = false,
+  description,
+  hint,
+  leftIcon,
+  rightIcon,
+  clearable,
+  containerClassName,
+  className
 }) {
+  const [error, setError] = React2.useState(null);
+  const handleChange = (newValue) => {
+    setError(null);
+    onChange(newValue);
+  };
+  const handleClear = () => {
+    handleChange("");
+  };
   return /* @__PURE__ */ jsxs2(
     "div",
     {
       className: cn(
         "flex flex-1 gap-2",
-        direction === "column" ? "flex-col" : "items-center"
+        direction === "column" ? "flex-col" : "items-center",
+        containerClassName
       ),
       children: [
         label && /* @__PURE__ */ jsxs2(
@@ -490,28 +510,56 @@ function InputField({
             ]
           }
         ),
-        isTextarea ? /* @__PURE__ */ jsx6(
-          Textarea,
-          {
-            value,
-            onChange: (e) => onChange(e.target.value),
-            placeholder,
-            disabled,
-            required,
-            className: "border-[#dddddd] font-['Stolzl_Book'] text-[12px] disabled:bg-[#f4f4f4]"
-          }
-        ) : /* @__PURE__ */ jsx6(
-          Input,
-          {
-            type,
-            value,
-            onChange: (e) => onChange(e.target.value),
-            placeholder,
-            disabled,
-            required,
-            className: "border-[#dddddd] font-['Stolzl_Book'] text-[12px] disabled:bg-[#f4f4f4]"
-          }
-        )
+        /* @__PURE__ */ jsxs2("div", { className: "relative flex-1", children: [
+          leftIcon && /* @__PURE__ */ jsx6("span", { className: "absolute inset-y-0 left-3 flex items-center pointer-events-none z-10", children: leftIcon }),
+          isTextarea ? /* @__PURE__ */ jsx6(
+            Textarea,
+            {
+              value,
+              onChange: (e) => handleChange(e.target.value),
+              placeholder,
+              disabled,
+              required,
+              className: cn(
+                "border-[#dddddd] font-['Stolzl_Book'] text-[12px] disabled:bg-[#f4f4f4] focus-visible:ring-2 focus-visible:ring-primary",
+                leftIcon && "pl-10",
+                (rightIcon || clearable) && "pr-10",
+                className
+              )
+            }
+          ) : /* @__PURE__ */ jsx6(
+            Input,
+            {
+              type,
+              value,
+              onChange: (e) => handleChange(e.target.value),
+              placeholder,
+              disabled,
+              required,
+              className: cn(
+                "border-[#dddddd] font-['Stolzl_Book'] text-[12px] disabled:bg-[#f4f4f4] focus-visible:ring-2 focus-visible:ring-primary",
+                leftIcon && "pl-10",
+                (rightIcon || clearable) && "pr-10",
+                className
+              )
+            }
+          ),
+          (rightIcon || clearable) && /* @__PURE__ */ jsxs2("span", { className: "absolute inset-y-0 right-2 flex items-center gap-1", children: [
+            rightIcon,
+            clearable && value && /* @__PURE__ */ jsx6(
+              "button",
+              {
+                type: "button",
+                "aria-label": "Clear",
+                onClick: handleClear,
+                className: "rounded p-1 hover:bg-muted text-foreground/70",
+                children: /* @__PURE__ */ jsx6(X2, { className: "h-4 w-4" })
+              }
+            )
+          ] })
+        ] }),
+        description && /* @__PURE__ */ jsx6("p", { className: "text-xs text-muted-foreground mt-1", children: description }),
+        error ? /* @__PURE__ */ jsx6("p", { className: "text-xs text-red-500 mt-1", children: error }) : hint ? /* @__PURE__ */ jsx6("p", { className: "text-xs text-muted-foreground mt-1", children: hint }) : null
       ]
     }
   );
@@ -659,8 +707,31 @@ function Select2({
   ] });
 }
 
-// components/core/data-table/index.tsx
-import React3, { useEffect as useEffect2, useMemo as useMemo2, useRef as useRef2, useState as useState3 } from "react";
+// components/core/form-fields/form.tsx
+import {
+  FormProvider
+} from "react-hook-form";
+import { jsx as jsx9 } from "react/jsx-runtime";
+function Form({
+  form,
+  onSubmit,
+  children,
+  ...formProps
+}) {
+  return /* @__PURE__ */ jsx9(FormProvider, { ...form, children: /* @__PURE__ */ jsx9(
+    "form",
+    {
+      ...formProps,
+      onSubmit: form.handleSubmit((data, event) => {
+        onSubmit?.(data, event);
+      }),
+      children
+    }
+  ) });
+}
+
+// components/core/data-table/data-table.tsx
+import React4, { useEffect as useEffect2, useMemo as useMemo2, useRef as useRef2, useState as useState3 } from "react";
 import {
   getCoreRowModel,
   getSortedRowModel,
@@ -670,12 +741,12 @@ import {
 // components/ui/checkbox.tsx
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { CheckIcon as CheckIcon2 } from "lucide-react";
-import { jsx as jsx9 } from "react/jsx-runtime";
+import { jsx as jsx10 } from "react/jsx-runtime";
 function Checkbox({
   className,
   ...props
 }) {
-  return /* @__PURE__ */ jsx9(
+  return /* @__PURE__ */ jsx10(
     CheckboxPrimitive.Root,
     {
       "data-slot": "checkbox",
@@ -684,12 +755,12 @@ function Checkbox({
         className
       ),
       ...props,
-      children: /* @__PURE__ */ jsx9(
+      children: /* @__PURE__ */ jsx10(
         CheckboxPrimitive.Indicator,
         {
           "data-slot": "checkbox-indicator",
           className: "flex items-center justify-center text-current transition-none",
-          children: /* @__PURE__ */ jsx9(CheckIcon2, { className: "size-3.5" })
+          children: /* @__PURE__ */ jsx10(CheckIcon2, { className: "size-3.5" })
         }
       )
     }
@@ -697,42 +768,574 @@ function Checkbox({
 }
 
 // components/ui/table.tsx
-import { jsx as jsx10 } from "react/jsx-runtime";
+import { jsx as jsx11 } from "react/jsx-runtime";
+function Table({ className, ...props }) {
+  return /* @__PURE__ */ jsx11(
+    "div",
+    {
+      "data-slot": "table-container",
+      className: "relative w-full overflow-x-auto",
+      children: /* @__PURE__ */ jsx11(
+        "table",
+        {
+          "data-slot": "table",
+          className: cn("w-full caption-bottom text-sm", className),
+          ...props
+        }
+      )
+    }
+  );
+}
+function TableHeader({ className, ...props }) {
+  return /* @__PURE__ */ jsx11(
+    "thead",
+    {
+      "data-slot": "table-header",
+      className: cn("[&_tr]:border-b", className),
+      ...props
+    }
+  );
+}
+function TableBody({ className, ...props }) {
+  return /* @__PURE__ */ jsx11(
+    "tbody",
+    {
+      "data-slot": "table-body",
+      className: cn("[&_tr:last-child]:border-0", className),
+      ...props
+    }
+  );
+}
+function TableRow({ className, ...props }) {
+  return /* @__PURE__ */ jsx11(
+    "tr",
+    {
+      "data-slot": "table-row",
+      className: cn(
+        "hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function TableHead({ className, ...props }) {
+  return /* @__PURE__ */ jsx11(
+    "th",
+    {
+      "data-slot": "table-head",
+      className: cn(
+        "text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function TableCell({ className, ...props }) {
+  return /* @__PURE__ */ jsx11(
+    "td",
+    {
+      "data-slot": "table-cell",
+      className: cn(
+        "p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+        className
+      ),
+      ...props
+    }
+  );
+}
 
 // components/core/data-table/header.tsx
 import { ChevronsUpDown, ChevronsDown, ChevronsUp } from "lucide-react";
 import { flexRender } from "@tanstack/react-table";
-import { Fragment as Fragment2, jsx as jsx11, jsxs as jsxs5 } from "react/jsx-runtime";
+
+// components/core/data-table/utils.ts
+function getBaseCellClassNames(id, label, minSize, hasColumnFilter) {
+  const base = "p-1 text-[12px] text-[#222222]";
+  const textAlign = typeof label === "string" && label.toLowerCase().includes("qty") ? "text-right" : "text-left";
+  const padding = hasColumnFilter ? "" : "pr-[18px]";
+  const widthClass = (() => {
+    if (id === "select") return "w-[30px]";
+    if (id === "actions") return "w-[80px]";
+    if (minSize && minSize !== 20) return `w-[${minSize}px]`;
+    return "";
+  })();
+  return [base, padding, textAlign, widthClass].join(" ").trim();
+}
+function getHeaderCellClassNames(header, hasColumnFilter = false) {
+  const { id, minSize } = header.column.columnDef;
+  const accessorKey = header.column.columnDef.accessorKey;
+  const headerLabel = header.column.columnDef.header;
+  const label = hasColumnFilter ? accessorKey : String(headerLabel);
+  return getBaseCellClassNames(id, label, minSize, hasColumnFilter);
+}
+function getBodyCellClassNames(cell) {
+  const { id, minSize } = cell.column.columnDef;
+  const label = cell.column.columnDef.header;
+  return getBaseCellClassNames(id, label, minSize);
+}
+function setCellBorder(length, index) {
+  return length === index + 1 ? "border-b-0" : "border-b";
+}
+function setCellAlignment(key) {
+  return key.includes("actions") ? "" : "text-left";
+}
+
+// components/core/data-table/header.tsx
+import { Fragment as Fragment2, jsx as jsx12, jsxs as jsxs5 } from "react/jsx-runtime";
+function TableHeader2({
+  table,
+  isSub,
+  hasColumnFilter
+}) {
+  return /* @__PURE__ */ jsx12(Fragment2, { children: /* @__PURE__ */ jsx12(TableHeader, { children: table.getHeaderGroups().map((headerGroup) => /* @__PURE__ */ jsx12(TableRow, { children: headerGroup.headers.map((header) => {
+    const isSorted = header.column.getIsSorted();
+    const isSortedDesc = isSorted === "desc";
+    return /* @__PURE__ */ jsx12(
+      TableHead,
+      {
+        className: `cursor-pointer p-1 text-left text-[12px] text-[#222222] ${header.column.columnDef.header === "QTY" ? "w-[55px]" : ""} ${getHeaderCellClassNames(header)} ${isSub ? "h-auto" : "h-10"} `,
+        onClick: (event) => {
+          if (hasColumnFilter) return;
+          const toggleSortingHandler = header.column.getToggleSortingHandler();
+          if (toggleSortingHandler) {
+            toggleSortingHandler(event);
+          }
+        },
+        ...header.column.columnDef.minSize !== 20 ? {
+          style: {
+            width: `${header.column.columnDef.minSize}px`
+          }
+        } : {},
+        children: /* @__PURE__ */ jsxs5(
+          "div",
+          {
+            className: `${isSub ? "font-[500]" : "font-bold"} relative`,
+            children: [
+              flexRender(
+                header.column.columnDef.header,
+                header.getContext()
+              ),
+              /* @__PURE__ */ jsx12("span", { className: `absolute`, children: header.column.columnDef.enableSorting ? isSorted ? isSortedDesc ? /* @__PURE__ */ jsx12(
+                ChevronsDown,
+                {
+                  size: "12",
+                  className: "mx-1 inline-block"
+                }
+              ) : /* @__PURE__ */ jsx12(
+                ChevronsUp,
+                {
+                  size: "12",
+                  className: "mx-1 inline-block"
+                }
+              ) : /* @__PURE__ */ jsx12(
+                ChevronsUpDown,
+                {
+                  size: "12",
+                  className: "mx-1 inline-block"
+                }
+              ) : null })
+            ]
+          }
+        )
+      },
+      header.id
+    );
+  }) }, headerGroup.id)) }) });
+}
 
 // components/core/data-table/body.tsx
 import { Fragment as Fragment3 } from "react";
 import { ChevronUp, ChevronDown as ChevronDown2 } from "lucide-react";
 import { flexRender as flexRender2 } from "@tanstack/react-table";
-import { Fragment as Fragment4, jsx as jsx12, jsxs as jsxs6 } from "react/jsx-runtime";
+import { Fragment as Fragment4, jsx as jsx13, jsxs as jsxs6 } from "react/jsx-runtime";
+function TableBody2({
+  table,
+  selectedRows,
+  expandedRows,
+  truncated,
+  renderSubTable,
+  toggleRowExpansion,
+  isSub
+}) {
+  return /* @__PURE__ */ jsx13(
+    TableBody,
+    {
+      className: "rounded-[5px]",
+      style: {
+        boxShadow: isSub ? "" : "rgb(222, 222, 222) inset 0px 0px 0px 1px"
+      },
+      children: table.getRowModel().rows.map((row, index) => /* @__PURE__ */ jsxs6(Fragment3, { children: [
+        /* @__PURE__ */ jsx13(
+          TableRow,
+          {
+            className: `hover:bg-gray-100 ${setCellBorder(
+              table.getRowModel().rows.length,
+              index
+            )} ${selectedRows.has(row.id) || expandedRows.has(row.id) ? "bg-[#f0f0f4]" : ""}`,
+            children: row.getVisibleCells().map((cell, index2) => /* @__PURE__ */ jsx13(
+              TableCell,
+              {
+                className: `p-1 font-['Stolzl_Book'] text-[12px] text-[#222222] ${truncated ? "truncate" : ""} ${expandedRows.has(row.id) ? "background-color: rgb(243 244 246 / var(--tw-bg-opacity))" : ""} ${setCellAlignment(cell.id)} ${getBodyCellClassNames(cell)}`,
+                children: /* @__PURE__ */ jsxs6("div", { className: "relative", children: [
+                  renderSubTable && toggleRowExpansion && index2 === 1 && /* @__PURE__ */ jsx13(Fragment4, { children: /* @__PURE__ */ jsx13(
+                    "span",
+                    {
+                      className: "absolute left-[-15px] top-[50%] translate-y-[-50%]",
+                      onClick: () => toggleRowExpansion(row.id),
+                      children: expandedRows.has(row.id) ? /* @__PURE__ */ jsx13(ChevronUp, { size: "14", className: "mt-[2px]" }) : /* @__PURE__ */ jsx13(ChevronDown2, { size: "14", className: "mt-[2px]" })
+                    }
+                  ) }),
+                  flexRender2(cell.column.columnDef.cell, cell.getContext())
+                ] })
+              },
+              cell.id
+            ))
+          },
+          row.id
+        ),
+        expandedRows.has(row.id) && renderSubTable && /* @__PURE__ */ jsx13(TableRow, { children: /* @__PURE__ */ jsx13(
+          TableCell,
+          {
+            colSpan: row.getVisibleCells().length,
+            className: "bg-gray-50 p-0",
+            children: renderSubTable(row.original)
+          }
+        ) })
+      ] }, row.id))
+    }
+  );
+}
 
 // components/core/data-table/useDataTable.ts
 import { useState as useState2, useCallback as useCallback2 } from "react";
 import { useDebouncedCallback } from "use-debounce";
+function useDataTable(data, paginationMode = "none") {
+  const [selectedRows, setSelectedRows] = useState2(/* @__PURE__ */ new Set());
+  const [expandedRows, setExpandedRows] = useState2(/* @__PURE__ */ new Set());
+  const [page, setPage] = useState2(1);
+  const [limit, setLimit] = useState2(10);
+  const [hasMore, setHasMore] = useState2(true);
+  const toggleRowSelection = useCallback2((rowId) => {
+    setSelectedRows((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(rowId)) {
+        newSet.delete(rowId);
+      } else {
+        newSet.add(rowId);
+      }
+      return newSet;
+    });
+  }, []);
+  const toggleRowExpansion = useDebouncedCallback((rowId) => {
+    setExpandedRows((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(rowId)) {
+        newSet.delete(rowId);
+      } else {
+        newSet.clear();
+        newSet.add(rowId);
+      }
+      return newSet;
+    });
+  }, 100);
+  const toggleSelectAll = useCallback2(() => {
+    setSelectedRows((prev) => {
+      return prev.size === data.length ? /* @__PURE__ */ new Set() : new Set(data.map((row) => row.id));
+    });
+  }, [data]);
+  const handlePageChange = useCallback2(
+    (newPage) => {
+      if (paginationMode === "pagination") {
+        setPage(newPage);
+      }
+    },
+    [paginationMode]
+  );
+  return {
+    selectedRows,
+    expandedRows,
+    toggleRowSelection,
+    toggleRowExpansion,
+    toggleSelectAll,
+    page,
+    limit,
+    hasMore,
+    setHasMore,
+    handlePageChange
+  };
+}
 
 // components/core/data-table/infinite-scroll.tsx
 import { Loader2 as Loader22 } from "lucide-react";
-import { jsx as jsx13, jsxs as jsxs7 } from "react/jsx-runtime";
+import { jsx as jsx14, jsxs as jsxs7 } from "react/jsx-runtime";
+function InfiniteScrollFooter({
+  isLoading = false,
+  hasMore = true,
+  onLoadMore
+}) {
+  if (!hasMore) return null;
+  return /* @__PURE__ */ jsx14("div", { className: "flex justify-center py-2", children: /* @__PURE__ */ jsxs7(
+    Button,
+    {
+      onClick: onLoadMore,
+      disabled: isLoading,
+      variant: "outline",
+      className: "flex items-center gap-2",
+      children: [
+        isLoading && /* @__PURE__ */ jsx14(Loader22, { className: "animate-spin", size: 16 }),
+        isLoading ? "Loading..." : "Load More"
+      ]
+    }
+  ) });
+}
 
-// components/core/data-table/index.tsx
-import { jsx as jsx14, jsxs as jsxs8 } from "react/jsx-runtime";
-var Checkbox2 = React3.forwardRef((props, ref) => /* @__PURE__ */ jsx14(Checkbox, { ref, ...props }));
+// components/core/data-table/data-table.tsx
+import { jsx as jsx15, jsxs as jsxs8 } from "react/jsx-runtime";
+var Checkbox2 = React4.forwardRef((props, ref) => /* @__PURE__ */ jsx15(Checkbox, { ref, ...props }));
 Checkbox2.displayName = "Checkbox";
+function DataTable(props) {
+  const {
+    data: initialData,
+    columns: initialColumns = [],
+    subTableConfig,
+    showCheckbox = false,
+    isScrollable,
+    actionRenderer,
+    getRowId,
+    renderSubTable,
+    hasColumnFilter,
+    isSub,
+    paginationMode = "none",
+    isLoading,
+    handleLoadMore
+  } = props;
+  const data = useMemo2(() => initialData, [initialData]);
+  const memoizedColumns = useMemo2(() => initialColumns, [initialColumns]);
+  const [sorting, setSorting] = useState3([]);
+  const {
+    selectedRows,
+    toggleSelectAll,
+    expandedRows,
+    toggleRowSelection,
+    toggleRowExpansion,
+    hasMore
+  } = useDataTable(data, paginationMode);
+  const selectAllRef = useRef2(null);
+  const loadMoreRef = useRef2(null);
+  useEffect2(() => {
+    if (paginationMode !== "infinite-scroll") return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !isLoading) {
+          handleLoadMore?.();
+        }
+      },
+      { root: null, rootMargin: "0px", threshold: 1 }
+    );
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+    return () => {
+      observer.disconnect();
+    };
+  }, [paginationMode, hasMore, isLoading, handleLoadMore]);
+  const dynamicColumns = useMemo2(() => {
+    const extraColumns = [];
+    if (showCheckbox) {
+      extraColumns.push({
+        id: "select",
+        header: () => /* @__PURE__ */ jsx15(
+          "div",
+          {
+            className: `flex justify-center text-center ${renderSubTable && "pl-[5px] pr-[15px]"}`,
+            children: !isSub && /* @__PURE__ */ jsx15(
+              Checkbox2,
+              {
+                ref: selectAllRef,
+                checked: selectedRows.size === data.length && data.length > 0,
+                onCheckedChange: toggleSelectAll,
+                className: "row-checkbox border-[#CBCBCB]"
+              }
+            )
+          }
+        ),
+        cell: ({ row }) => /* @__PURE__ */ jsx15(
+          "div",
+          {
+            className: `flex justify-center text-center ${renderSubTable && "pl-[5px] pr-[15px]"}`,
+            children: /* @__PURE__ */ jsx15(
+              Checkbox2,
+              {
+                checked: selectedRows.has(row.id),
+                onCheckedChange: () => toggleRowSelection(row.id),
+                className: "row-checkbox border-[#CBCBCB]"
+              }
+            )
+          }
+        ),
+        size: 50
+      });
+    }
+    if (actionRenderer) {
+      extraColumns.push({
+        id: "actions",
+        header: "Actions",
+        cell: ({ row }) => actionRenderer(row.original)
+      });
+    }
+    return [...extraColumns, ...memoizedColumns];
+  }, [
+    showCheckbox,
+    actionRenderer,
+    memoizedColumns,
+    renderSubTable,
+    isSub,
+    selectedRows,
+    data.length,
+    toggleSelectAll,
+    toggleRowSelection
+  ]);
+  const table = useReactTable({
+    data,
+    columns: dynamicColumns,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting
+    },
+    onSortingChange: setSorting,
+    getRowId: getRowId ? (originalRow) => String(getRowId?.(originalRow)) : void 0
+  });
+  return /* @__PURE__ */ jsxs8("div", { className: `${isScrollable ? "overflow-x-auto" : ""} `, children: [
+    /* @__PURE__ */ jsxs8(Table, { className: `min-w-full table-auto`, children: [
+      /* @__PURE__ */ jsx15(
+        TableHeader2,
+        {
+          table,
+          isSub,
+          hasColumnFilter
+        }
+      ),
+      /* @__PURE__ */ jsx15(
+        TableBody2,
+        {
+          table,
+          selectedRows,
+          expandedRows,
+          renderSubTable,
+          isSub,
+          toggleRowExpansion
+        }
+      )
+    ] }),
+    paginationMode === "infinite-scroll" && /* @__PURE__ */ jsx15(
+      InfiniteScrollFooter,
+      {
+        isLoading,
+        hasMore,
+        onLoadMore: handleLoadMore
+      }
+    ),
+    paginationMode === "infinite-scroll" && /* @__PURE__ */ jsx15("div", { ref: loadMoreRef })
+  ] });
+}
+var data_table_default = DataTable;
 
-// components/core/table/index.tsx
+// components/core/table/table.tsx
 import {
   useReactTable as useReactTable2,
   getCoreRowModel as getCoreRowModel2,
   flexRender as flexRender3
 } from "@tanstack/react-table";
 import { CirclePlus } from "lucide-react";
-import { jsx as jsx15, jsxs as jsxs9 } from "react/jsx-runtime";
+import { jsx as jsx16, jsxs as jsxs9 } from "react/jsx-runtime";
+function Table2({
+  data,
+  isDisabled,
+  columns,
+  onAddRow,
+  showAddRowButton = true
+}) {
+  const table = useReactTable2({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel2()
+  });
+  return /* @__PURE__ */ jsxs9("div", { className: "max-w-full", children: [
+    /* @__PURE__ */ jsx16("div", { className: "border rounded-lg shadow-sm overflow-hidden", children: /* @__PURE__ */ jsxs9(Table, { children: [
+      /* @__PURE__ */ jsx16(TableHeader, { className: "bg-[#efefef] text-[#222222]", children: table.getHeaderGroups().map((headerGroup) => /* @__PURE__ */ jsx16(
+        TableRow,
+        {
+          className: "bg-[#efefef] text-[#222222]",
+          children: headerGroup.headers.map((header) => /* @__PURE__ */ jsx16(
+            TableHead,
+            {
+              className: `font-semibold text-gray-700 dark:text-gray-300 border-b border-r border-gray-200 last:border-r-0`,
+              children: header.isPlaceholder ? null : flexRender3(
+                header.column.columnDef.header,
+                header.getContext()
+              )
+            },
+            header.id
+          ))
+        },
+        headerGroup.id
+      )) }),
+      /* @__PURE__ */ jsx16(TableBody, { children: table.getRowModel().rows?.length ? table.getRowModel().rows.map((row) => /* @__PURE__ */ jsx16(
+        TableRow,
+        {
+          "data-state": row.getIsSelected() && "selected",
+          className: "hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150",
+          children: row.getVisibleCells().map((cell) => /* @__PURE__ */ jsx16(
+            TableCell,
+            {
+              className: `text-gray-800 dark:text-gray-200 border-b border-r border-gray-200 last:border-r-0 ${cell.column.columnDef.isRightAligned ? "text-right" : ""} ${cell.column.columnDef.accessorKey === "item_no" ? "font-medium text-gray-900 dark:text-gray-100" : ""}`,
+              children: flexRender3(
+                cell.column.columnDef.cell,
+                cell.getContext()
+              )
+            },
+            cell.id
+          ))
+        },
+        row.id
+      )) : /* @__PURE__ */ jsx16(TableRow, { children: /* @__PURE__ */ jsx16(
+        TableCell,
+        {
+          colSpan: columns.length,
+          className: "h-10 text-center text-gray-500 dark:text-gray-400",
+          children: "No records found"
+        }
+      ) }) })
+    ] }) }),
+    showAddRowButton && /* @__PURE__ */ jsx16("div", { className: "flex justify-start mt-2", children: /* @__PURE__ */ jsxs9(
+      Button,
+      {
+        onClick: onAddRow,
+        className: "bg-white text-black hover:bg-slate-400 ",
+        disabled: isDisabled,
+        children: [
+          /* @__PURE__ */ jsx16(CirclePlus, { className: "mr-2 h-4 w-4" }),
+          " ",
+          "Add Row"
+        ]
+      }
+    ) })
+  ] });
+}
 export {
   combo_box_default as ComboBox,
+  data_table_default as DataTable,
+  Form,
   InputField as Input,
-  Select2 as Select
+  Select2 as Select,
+  Table2 as Table,
+  getBaseCellClassNames,
+  getBodyCellClassNames,
+  getHeaderCellClassNames,
+  setCellAlignment,
+  setCellBorder,
+  useDataTable
 };
